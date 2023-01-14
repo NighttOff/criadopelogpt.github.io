@@ -19,31 +19,30 @@
     <input type="button" value="Cadastrar" onclick="register()">
   </form> 
   <script>
-      function validate(){
-          var username = document.getElementById("username").value;
-          var password = document.getElementById("password").value;
-          var storedUsername = localStorage.getItem("username");
-          var storedPassword = localStorage.getItem("password");
-          if(username === storedUsername && password === storedPassword){
-              window.location.href='https://www.google.com'
-          }else{
-              alert("Usuário ou senha incorretos!")
-          }
-      }
-      function register(){
-          var username = document.getElementById("username").value;
-          var password = document.getElementById("password").value;
-          if(username === "" || password === ""){
-              alert("Por favor, preencha todos os campos!");
-              return;
-          }
-          if(localStorage.getItem(username)){
-              alert("Este nome de usuário já está em uso. Escolha outro.");
-              return;
-          }
-          localStorage.setItem("username", username);
-          localStorage.setItem("password", password);
-          alert("Cadastrado com sucesso!");
+    var users = JSON.parse(localStorage.getItem("users")) || {};
+    function validate(){
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        if(users[username] && users[username].password === password){
+            window.location.href='https://www.google.com';
+        }else{
+            alert("Usuário ou senha incorretos!");
+        }
+    }
+    function register(){
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        if(username === "" || password === ""){
+            alert("Por favor, preencha todos os campos!");
+            return;
+        }
+        if(users[username]){
+            alert("Este nome de usuário já está em uso. Escolha outro.");
+            return;
+        }
+        users[username] = {password: password};
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Cadastrado com sucesso!");
       }
   </script>
 </body>
